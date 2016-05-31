@@ -1,4 +1,4 @@
-puts ARGV
+#puts ARGV
 
 contact_command = Hash.new
 
