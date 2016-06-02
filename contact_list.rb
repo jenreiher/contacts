@@ -30,10 +30,10 @@ case commands[:command]
 	
 	when "list" then puts Contact.all
 	
-	when "show" then puts Contact.find(search_term)
+	when "show" then puts Contact.find(commands[:search_term])
 	
 	when "search" 
-	  results = Contact.search(search_term)
+	  results = Contact.search(commands[:search_term])
 		results.each do |contact|
 			puts "#{contact[0]}: #{contact[1]} (#{contact[2]})"
 		end
