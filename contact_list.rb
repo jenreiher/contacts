@@ -14,6 +14,12 @@ end
 
 #####
 
+puts "Here is a list of available commands:
+		new - Create a new contact
+		list - List all contacts
+		show - Show a contact
+		search - Search contacts"
+
 commands = Hash.new
 commands[:command] = ARGV[0]
 commands[:search_term] = ARGV[1]
@@ -28,7 +34,13 @@ case commands[:command]
 		new_id = ContactList.new_contact(name,email)
 		puts "Contact successfully created with the id #{new_id}"
 	
-	when "list" then puts Contact.all
+	when "list"
+		contact_list = Contact.all
+		contact_list.each do |contact|
+			puts "#{contact.id}: #{contact.name} (#{contact.email})"
+		end
+		puts "--- \n #{contact_list.length} records total"
+
 	
 	when "show" then puts Contact.find(search_term)
 	
@@ -40,7 +52,7 @@ case commands[:command]
 		puts "--- \n #{results.length} records total"
 	
 	else
-		puts "help todo"
+		puts "please enter a command when you run the program and try again"
 
 end
 
