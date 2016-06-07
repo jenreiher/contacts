@@ -45,7 +45,6 @@ class Contact
 
       CSV.open('contacts.csv', 'a') do |row| 
         row << [new_id,new_name,new_email]
-
       end
       return new_id
     end
