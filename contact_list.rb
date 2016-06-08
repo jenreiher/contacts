@@ -5,10 +5,6 @@ class ContactList
 
 	class << self
 	  # TODO: Implement user interaction. This should be the only file where you use `puts` and `gets`
-
-	  def new_contact(name,email)
-	  	return Contact.create(name,email)
-	  end
 	end
 end
 
@@ -31,8 +27,8 @@ case commands[:command]
 		name = STDIN.gets.chomp
 		puts "Enter email"
 		email = STDIN.gets.chomp
-		new_id = ContactList.new_contact(name,email)
-		puts "Contact successfully created with the id #{new_id}"
+		created_contact = Contact.create(name,email)
+		puts "Contact (#{created_contact.name}) successfully created with an id of #{created_contact.id}"
 	
 	when "list"
 		contact_list = Contact.all
@@ -42,14 +38,18 @@ case commands[:command]
 		puts "--- \n #{contact_list.length} records total"
 
 	
-	when "show" then puts Contact.find(search_term)
+	when "show"
+		found_contact = Contact.find(commands[:search_term])
+		found_contact.each do |contact|
+			puts "#{contact.id}: #{contact.name} (#{contact.email})"
+		end
 	
 	when "search" 
-	  results = Contact.search(search_term)
-		results.each do |contact|
-			puts "#{contact[0]}: #{contact[1]} (#{contact[2]})"
+	  search_results = Contact.search(commands[:search_term])
+		search_results.each do |contact|
+			puts "#{contact.id}: #{contact.name} (#{contact.email})"
 		end
-		puts "--- \n #{results.length} records total"
+		puts "--- \n #{search_results.length} records total"
 	
 	else
 		puts "please enter a command when you run the program and try again"
