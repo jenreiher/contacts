@@ -27,8 +27,8 @@ class Contact
    # save is a 'helper method' for create
   def save
     if id
-      @@conn.exec("UPDATE contacts SET id=$1, name=$2, email=$3;", 
-      [id.to_i, name, email])
+      @@conn.exec("UPDATE contacts SET name = $2, email = $3 WHERE id = $1::int;", 
+      [id, name, email])
     else
       result = @@conn.exec("INSERT INTO contacts (name, email) 
       VALUES ($1, $2) RETURNING id;", 
@@ -37,6 +37,15 @@ class Contact
     end 
     self
   end
+
+  def destroy
+    if id
+      @@conn.exec("DELETE from CONTACTS where id = $1::int", [id])
+    else
+      return "Record not found"
+    end
+  end
+
 
 
   # Provides functionality for managing contacts in the csv file.
@@ -65,10 +74,8 @@ class Contact
     def find(id)
       results = []
       unless id.nil?
-        @@conn.exec("SELECT * FROM contacts WHERE name LIKE $1::int", [id]).each do |contact|
+        @@conn.exec("SELECT * FROM contacts WHERE id = $1::int", [id]).each do |contact|
           results << Contact.new(contact["id"], contact["name"], contact["email"])
-          # @return [Contact, nil] the contact with the specified id. 
-          # If no contact has the id, returns nil.
         end
       else
         nil
